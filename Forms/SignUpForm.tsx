@@ -88,6 +88,59 @@ const SignUpForm = ({ onSuccess }: Props) => {
         )}
       />
       {errors.lastName && <Text style={styles.error}>{errors.lastName.message}</Text>}
+
+      <Text style={styles.label}>Email</Text>
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.email && styles.inputError]}
+            placeholder="e.g. example@example.com"
+            placeholderTextColor={theme.colors.mute}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        )}
+      />
+      {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+
+      <Text style={styles.label}>Password</Text>
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.password && styles.inputError]}
+            placeholder="Minimum 8 Characters, an uppercase character, and number"
+            placeholderTextColor={theme.colors.mute}
+            value={value}
+            onChangeText={onChange}
+            secureTextEntry
+          />
+        )}
+      />
+      {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
+
+      <Text style={styles.label}>Confirm Password</Text>
+      <Controller
+        control={control}
+        name="confirmPassword"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.confirmPassword && styles.inputError]}
+            placeholder="Re-enter your password"
+            placeholderTextColor={theme.colors.mute}
+            value={value}
+            onChangeText={onChange}
+            secureTextEntry
+          />
+        )}
+      />
+      {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword.message}</Text>}
+
       <Pressable
         style={[styles.button, !isFormFilled && styles.buttonDisabled]}
         onPress={handleSubmit(onSubmit)}
