@@ -22,7 +22,9 @@ const signUpSchema = z.object({
 
 type SignUpForm = z.infer<typeof signUpSchema>;
 
-const SignUpForm = () => {
+type Props = { onSuccess: () => void };
+
+const SignUpForm = ({ onSuccess }: Props) => {
   const {
     control,
     handleSubmit,
@@ -45,6 +47,7 @@ const SignUpForm = () => {
 
   const onSubmit = (data: SignUpForm) => {
     console.log("Sign Up: ", data);
+    onSuccess();
   };
 
   return (
