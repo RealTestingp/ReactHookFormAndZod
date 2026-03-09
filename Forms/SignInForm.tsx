@@ -93,17 +93,15 @@ const styles = StyleSheet.create({
     padding: theme.spacing.screen,
   },
   h1: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "800",
-    marginBottom: 20,
     color: theme.colors.text,
+    marginBottom: 6 
   },
-  subtitle: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: theme.colors.text,
-    marginBottom: 6,
-    marginTop: 16,
+  subtitle: { 
+    fontSize: 15,
+    color: theme.colors.mute,
+    marginBottom: 28,
   },
   label: {
     fontSize: 14,
