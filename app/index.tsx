@@ -1,9 +1,10 @@
 import { Text, View } from "react-native";
+import EmployeeForm from "@/Forms/EmployeeForm";
 
 export default function Index() {
   return (
-    <main>
-      
-    </main>>
+    <View>
+      <EmployeeForm/>
+    </View>
   );
 }
