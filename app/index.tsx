@@ -1,6 +1,6 @@
-import EmployeeForm from "@/Forms/EmployeeForm";
-import SignInForm from "@/Forms/SignInForm";
-import SignUpForm from "@/Forms/SignUpForm";
+import EmployeeForm from "@/app/(tabs)/EmployeeForm";
+import SignInForm from "@/app/(tabs)/SignInForm";
+import SignUpForm from "@/app/(tabs)/SignUpForm";
 import { theme } from "@/styles/theme";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
