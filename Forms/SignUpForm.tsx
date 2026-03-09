@@ -1,7 +1,8 @@
+import { theme } from '@/styles/theme';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { z } from "zod";
 
 const signUpSchema = z.object({
@@ -55,14 +56,104 @@ const SignUpForm = () => {
       <Controller
         control={control}
         name="firstName"
-        render={({ field: { onChange,}})}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.firstName && styles.inputError]}
+            placeholder="e.g. Dylan"
+            placeholderTextColor={theme.colors.mute}
+            value={value}
+            onChangeText={onChange}
+            autoCapitalize="words"
+          />
+        )}
+      />
+      {errors.firstName && <Text style={styles.error}>{errors.firstName.message}</Text>}
+
+      <Text style={styles.label}>Last Name</Text>
+      <Controller
+        control={control}
+        name="lastName"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={[styles.input, errors.lastName && styles.inputError]}
+            placeholder="e.g. Khuu"
+            placeholderTextColor={theme.colors.mute}
+            value={value}
+            onChangeText={onChange}
+            autoCapitalize="words"
+          />
+        )}
+      />
+      {errors.lastName && <Text style={styles.error}>{errors.lastName.message}</Text>}
+      <Pressable
+        style={[styles.button, !isFormFilled && styles.buttonDisabled]}
+        onPress={handleSubmit(onSubmit)}
+        disabled={!isFormFilled}
+      >
+        <Text style={styles.buttonText}>Create Account</Text>
+      </Pressable>
     </ScrollView>
-  )
+  );
+};
 
+export default SignUpForm;
 
-
-}
-
-export default SignUpForm
-
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.bg,
+  },
+  content: {
+    padding: theme.spacing.screen
+  },
+  h1: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: theme.colors.text,
+    marginBottom: 6 
+  },
+  subtitle: { 
+    fontSize: 15,
+    color: theme.colors.mute,
+    marginBottom: 28,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: theme.colors.text,
+    marginBottom: 6,
+    marginTop: 16
+  },
+  input: {
+    backgroundColor: theme.colors.card,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.radius.input,
+    padding: 14,
+    fontSize: 16,
+    color: theme.colors.text,
+  },
+  inputError: {
+    borderColor: theme.colors.error
+  },
+  error: {
+    color: theme.colors.error,
+    fontSize: 13,
+    marginTop: 4
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+    padding: 16,
+    alignItems: "center",
+    borderRadius: theme.radius.input,
+    marginTop: 28,
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "700"
+  },
+});
