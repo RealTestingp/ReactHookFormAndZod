@@ -18,6 +18,7 @@ type EmployeeForm = z.infer<typeof employeeSchema>;
 const EmployeeForm = () => {
   const [isEditing, setIsEditing] = useState(true);
   const [hasSavedData, setHasSavedData] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const {
     control,
@@ -116,11 +117,13 @@ const EmployeeForm = () => {
         name="firstName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.firstName && styles.inputError]}
+            style={[styles.input, focusedField === "firstName" && styles.inputFocused, errors.firstName && styles.inputError]}
             placeholder="e.g Jane"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("firstName")}
+            onBlur={() => setFocusedField(null)}
             autoCapitalize="words"
           />
         )}
@@ -134,11 +137,13 @@ const EmployeeForm = () => {
         name="lastName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.lastName && styles.inputError]}
+            style={[styles.input, focusedField === "lastName" && styles.inputFocused, errors.lastName && styles.inputError]}
             placeholder="e.g Smith"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("lastName")}
+            onBlur={() => setFocusedField(null)}
             autoCapitalize="words"
           />
         )}
@@ -152,11 +157,13 @@ const EmployeeForm = () => {
         name="email"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.email && styles.inputError]}
+            style={[styles.input, focusedField === "email" && styles.inputFocused, errors.email && styles.inputError]}
             placeholder="e.g example@example.com"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("email")}
+            onBlur={() => setFocusedField(null)}
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -171,11 +178,13 @@ const EmployeeForm = () => {
         name="phone"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.phone && styles.inputError]}
+            style={[styles.input, focusedField === "phone" && styles.inputFocused, errors.phone && styles.inputError]}
             placeholder="e.g 123-456-7890"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("phone")}
+            onBlur={() => setFocusedField(null)}
             keyboardType="phone-pad"
           />
         )}
@@ -189,11 +198,13 @@ const EmployeeForm = () => {
         name="employeeId"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.employeeId && styles.inputError]}
+            style={[styles.input, focusedField === "employeeId" && styles.inputFocused, errors.employeeId && styles.inputError]}
             placeholder="e.g A00123456"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("employeeId")}
+            onBlur={() => setFocusedField(null)}
             autoCapitalize="characters"
           />
         )}
@@ -258,6 +269,9 @@ const styles = StyleSheet.create({
     padding: 14,
     fontSize: 16,
     color: theme.colors.text,
+  },
+  inputFocused: {
+    borderColor: theme.colors.primary,
   },
   inputError: {
     borderColor: theme.colors.error,

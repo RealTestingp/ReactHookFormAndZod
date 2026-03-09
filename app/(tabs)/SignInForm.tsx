@@ -1,6 +1,6 @@
 import { theme } from '@/styles/theme';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { z } from "zod";
@@ -11,10 +11,11 @@ const signInSchema = z.object({
 });
 
 type SignInForm = z.infer<typeof signInSchema>;
-
 type Props = { onSuccess: () => void };
 
 const SignInForm = ({ onSuccess }: Props) => {
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+
   const {
     control,
     handleSubmit,
@@ -32,7 +33,7 @@ const SignInForm = ({ onSuccess }: Props) => {
   const onSubmit = (data: SignInForm) => {
     console.log("Sign In: ", data);
     onSuccess();
-  }
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -45,13 +46,15 @@ const SignInForm = ({ onSuccess }: Props) => {
         name="email"
         render={({ field: { onChange, value } }) => (
           <TextInput
-          style={[styles.input, errors.email && styles.inputError]}
-          placeholder="e.g. example@example.com"
-          placeholderTextColor={theme.colors.mute}
-          value={value}
-          onChangeText={onChange}
-          keyboardType="email-address"
-          autoCapitalize="none"
+            style={[styles.input, focusedField === "email" && styles.inputFocused, errors.email && styles.inputError]}
+            placeholder="e.g. example@example.com"
+            placeholderTextColor={theme.colors.mute}
+            value={value}
+            onChangeText={onChange}
+            onFocus={() => setFocusedField("email")}
+            onBlur={() => setFocusedField(null)}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
         )}
       />
@@ -63,11 +66,13 @@ const SignInForm = ({ onSuccess }: Props) => {
         name="password"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.password && styles.inputError]}
+            style={[styles.input, focusedField === "password" && styles.inputFocused, errors.password && styles.inputError]}
             placeholder="Enter your password"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("password")}
+            onBlur={() => setFocusedField(null)}
             secureTextEntry
           />
         )}
@@ -85,7 +90,7 @@ const SignInForm = ({ onSuccess }: Props) => {
   );
 };
 
-export default SignInForm
+export default SignInForm;
 
 const styles = StyleSheet.create({
   container: {
@@ -99,9 +104,9 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "800",
     color: theme.colors.text,
-    marginBottom: 6 
+    marginBottom: 6,
   },
-  subtitle: { 
+  subtitle: {
     fontSize: 15,
     color: theme.colors.mute,
     marginBottom: 28,
@@ -121,6 +126,9 @@ const styles = StyleSheet.create({
     padding: 14,
     fontSize: 16,
     color: theme.colors.text,
+  },
+  inputFocused: {
+    borderColor: theme.colors.primary,
   },
   inputError: {
     borderColor: theme.colors.error,
@@ -145,4 +153,4 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     opacity: 0.5,
   },
-})
+});

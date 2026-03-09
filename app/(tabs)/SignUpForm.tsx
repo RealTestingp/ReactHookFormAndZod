@@ -1,6 +1,6 @@
 import { theme } from '@/styles/theme';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { z } from "zod";
@@ -10,10 +10,10 @@ const signUpSchema = z.object({
   lastName: z.string().trim().min(3, "Last name must be at least 3 characters").max(50, "Last name must be at most 50 characters"),
   email: z.string().trim().email("Invalid email address"),
   password: z
-  .string()
-  .min(8, "Password must be at least 8 characters")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number"),
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
   confirmPassword: z.string().min(1, "Please confirm your password"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
@@ -21,10 +21,11 @@ const signUpSchema = z.object({
 });
 
 type SignUpForm = z.infer<typeof signUpSchema>;
-
 type Props = { onSuccess: () => void };
 
 const SignUpForm = ({ onSuccess }: Props) => {
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+
   const {
     control,
     handleSubmit,
@@ -61,11 +62,13 @@ const SignUpForm = ({ onSuccess }: Props) => {
         name="firstName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.firstName && styles.inputError]}
+            style={[styles.input, focusedField === "firstName" && styles.inputFocused, errors.firstName && styles.inputError]}
             placeholder="e.g. Dylan"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("firstName")}
+            onBlur={() => setFocusedField(null)}
             autoCapitalize="words"
           />
         )}
@@ -78,11 +81,13 @@ const SignUpForm = ({ onSuccess }: Props) => {
         name="lastName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.lastName && styles.inputError]}
+            style={[styles.input, focusedField === "lastName" && styles.inputFocused, errors.lastName && styles.inputError]}
             placeholder="e.g. Khuu"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("lastName")}
+            onBlur={() => setFocusedField(null)}
             autoCapitalize="words"
           />
         )}
@@ -95,11 +100,13 @@ const SignUpForm = ({ onSuccess }: Props) => {
         name="email"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.email && styles.inputError]}
+            style={[styles.input, focusedField === "email" && styles.inputFocused, errors.email && styles.inputError]}
             placeholder="e.g. example@example.com"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("email")}
+            onBlur={() => setFocusedField(null)}
             keyboardType="email-address"
             autoCapitalize="none"
           />
@@ -113,11 +120,13 @@ const SignUpForm = ({ onSuccess }: Props) => {
         name="password"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.password && styles.inputError]}
+            style={[styles.input, focusedField === "password" && styles.inputFocused, errors.password && styles.inputError]}
             placeholder="Minimum 8 Characters, an uppercase character, and number"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("password")}
+            onBlur={() => setFocusedField(null)}
             secureTextEntry
           />
         )}
@@ -130,11 +139,13 @@ const SignUpForm = ({ onSuccess }: Props) => {
         name="confirmPassword"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={[styles.input, errors.confirmPassword && styles.inputError]}
+            style={[styles.input, focusedField === "confirmPassword" && styles.inputFocused, errors.confirmPassword && styles.inputError]}
             placeholder="Re-enter your password"
             placeholderTextColor={theme.colors.mute}
             value={value}
             onChangeText={onChange}
+            onFocus={() => setFocusedField("confirmPassword")}
+            onBlur={() => setFocusedField(null)}
             secureTextEntry
           />
         )}
@@ -160,15 +171,15 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.bg,
   },
   content: {
-    padding: theme.spacing.screen
+    padding: theme.spacing.screen,
   },
   h1: {
     fontSize: 28,
     fontWeight: "800",
     color: theme.colors.text,
-    marginBottom: 6 
+    marginBottom: 6,
   },
-  subtitle: { 
+  subtitle: {
     fontSize: 15,
     color: theme.colors.mute,
     marginBottom: 28,
@@ -178,7 +189,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: theme.colors.text,
     marginBottom: 6,
-    marginTop: 16
+    marginTop: 16,
   },
   input: {
     backgroundColor: theme.colors.card,
@@ -189,13 +200,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.text,
   },
+  inputFocused: {
+    borderColor: theme.colors.primary,
+  },
   inputError: {
-    borderColor: theme.colors.error
+    borderColor: theme.colors.error,
   },
   error: {
     color: theme.colors.error,
     fontSize: 13,
-    marginTop: 4
+    marginTop: 4,
   },
   button: {
     backgroundColor: theme.colors.primary,
@@ -210,6 +224,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#ffffff",
     fontSize: 16,
-    fontWeight: "700"
+    fontWeight: "700",
   },
 });
